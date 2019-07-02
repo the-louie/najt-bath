@@ -7,6 +7,8 @@ from fbchat.models import *
 import json
 import os
 
+from svultron import svultron
+
 # Subclass fbchat.Client and override required methods
 class EchoBot(Client):
     def onMessage(self, author_id, message_object, thread_id, thread_type, **kwargs):
@@ -18,7 +20,13 @@ class EchoBot(Client):
             with open('commands.json') as command_config:
                 json_commands = command_config.read()
                 commands = json.loads(json_commands)
-                if message_object.text[1:] in commands:
+
+                if message_object.text[1:] == 'svultron':
+                    let reply_text = svultron()
+                    reply_text = commands[message_object.text[1:]]
+                    log.info("{}: reply text: '{}'".format(message_object.text[1:], reply_text))
+                    client.send(Message(text=reply_text), thread_id=thread_id, thread_type=thread_type)
+                else if message_object.text[1:] in commands:
                     reply_text = commands[message_object.text[1:]]
                     log.info("{}: reply text: '{}'".format(message_object.text[1:], reply_text))
                     client.send(Message(text=reply_text), thread_id=thread_id, thread_type=thread_type)
