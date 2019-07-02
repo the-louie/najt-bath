@@ -6,6 +6,7 @@ from fbchat import log, Client
 from fbchat.models import *
 import json
 import os
+import random
 
 from svultron import svultron
 
@@ -34,9 +35,12 @@ class EchoBot(Client):
                     commands = json.loads(json_commands)
 
                     if msg.text[1:] in commands:
+                        response = commands[msg.text[1:]]
+                        if isinstance(response, list):
+                            response = random.choice(commands[msg.text[1:]])
                         self.send_reply(
                             msg.text[1:],
-                            commands[msg.text[1:]],
+                            response,
                             tid,
                             ttype
                         )
