@@ -32,7 +32,7 @@ class EchoBot(Client):
         self.markAsDelivered(thread_id, message_object.uid)
         self.markAsRead(thread_id)
 
-        if author_id != self.uid and message_object.text[0] == '!':
+        if author_id != self.uid and message_object.text is not None and message_object.text[0] == '!':
             # Handle !svultron as a special case. It calls an external
             # module that generates a fake quote based on keywords.
             if message_object.text[1:] == 'svultron':
